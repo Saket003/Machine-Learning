@@ -1,0 +1,392 @@
+\documentclass[12pt]{article}
+\usepackage{latexsym}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{epsfig}
+\usepackage{ulem}
+
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf COL341: Fundamentals of Machine Learning} \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+%Added to reduce time taken to write epsilon - After Q2
+\newcommand{\e}[0]{\epsilon}
+\newcommand{\E}[0]{\epsilon}
+%First page title bar
+\newcommand{\homework}[4]{\handout{#1}{#2}{Lecturer: #3}{#4}{Homework #1}}
+
+% 1-inch margins, from fullpage.sty by H.Partl, Version 2, Dec. 15, 1988.
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+
+\begin{document}
+\homework{1}{Spring 2023}{Prof. Chetan Arora}{Saket Kandoi 2021MT60265}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Question 1}
+\textbf{(a)} Given,
+\begin{align*}
+    H & = X(X^TX)^{-1}X^T
+\end{align*}
+To show:
+\begin{align}
+    H & = H^T
+\end{align}
+Let us begin by calculating \(H^T\),
+\begin{align*}
+    H^T & = (X(X^TX)^{-1}X^T)^T \\
+    & = (X^T)^T((X^TX)^{-1})^TX^T & (\because (A_1A_2\ldots A_n)^T = A_n^T\ldots A_2^TA_1^T)\\
+    & = X((X^TX)^{-1})^TX^T & (\because (A^T)^T = A) \\
+    & = X((X^TX)^T)^{-1}X^T & (\because I = (A^{-1}A)^T = A^T(A^{-1})^T \implies (A^T)^{-1} = (A^{-1})^T)\\
+    & = X(X^T(X^T)^T)^{-1}X^T \\
+    & = X(X^TX)^{-1}X^T \\
+    & = H
+\end{align*}
+Hence,\(H\) is symmetric.
+
+
+\textbf{(b)} To show:
+\begin{align}
+    H^K & = H \text{ for any positive integer \(K\).}
+\end{align}
+We will prove the above statement using mathematical induction.\\
+\uline{Base case}:\\
+For \(K = 1\), \(H = H\) is trivial. For \(K = 2\),
+\begin{align*}
+    H^2 & =  H\cdot H\\
+    & = (X(X^TX)^{-1}X^T)\cdot(X(X^TX)^{-1}X^T) \\
+    & = X(X^TX)^{-1}X^TX(X^TX)^{-1}X^T \\
+    & = X(X^TX)^{-1}(X^TX)(X^TX)^{-1}X^T \\
+    & = X((X^TX)^{-1}(X^TX))(X^TX)^{-1}X^T \\
+    & = X(I)(X^TX)^{-1}X^T  & (\because A^{-1}A = AA^{-1} = I)\\
+    & = X(X^TX)^{-1}X^T & (\because XI = IX = X)\\
+    & = H
+\end{align*}
+
+\uline{Induction Hypothesis}: \(H^K = H\) for \(K = n \) \((n\geq 2)\)\\
+
+\uline{Inductive Step}:
+\begin{align*}
+    H^{n+1} & = H^n\cdot H\\
+        & = H\cdot H & \text{ (By Induction Hypothesis)}\\
+        & = H^2 \\
+        & = H
+\end{align*}
+
+Hence, by the principle of mathematical induction, \(H^K = H\) is true for all \(K \in \mathbb{N}\).
+
+
+\textbf{(c)} Given \(I\) is a \(N\times N\) Identity matrix,\\
+To show:
+\begin{align}
+    (I-H)^K & = (I-H) \text{ for any positive integer \(K\).}
+\end{align}
+We will prove the above statement using mathematical induction.\\
+\uline{Base case}:\\
+For \(K = 1\), \((I-H) = (I-H)\) is trivial. For \(K = 2\),
+\begin{align*}
+    (I-H)^2 & =  (I-H)\cdot (I-H)\\
+    & = I\cdot I - I\cdot H - H\cdot I + H\cdot H \\
+    & = I^2 - 2H + H^2\\
+    & = I - 2H + H^2 \\
+    & = I - 2H + H & \text{ (By Equation (2))}\\
+    & = I - H
+\end{align*}
+
+\uline{Induction Hypothesis}: \((I-H)^K = I-H\) for \(K = n \) \((n\geq 2)\)\\
+
+\uline{Inductive Step}:
+\begin{align*}
+    (I-H)^{n+1} & = (I-H)^n\cdot (I-H)\\
+        & = (I-H)\cdot (I-H) & \text{ (By Induction Hypothesis)}\\
+        & = (I-H)^2 \\
+        & = I-H
+\end{align*}
+
+Hence, by the principle of mathematical induction, \((I-H)^K = (I-H)\) is true for all \(K \in \mathbb{N}\).
+
+\textbf{(d)} To show:
+\begin{align}
+    trace(H) & = d + 1
+\end{align}
+Substituting \(H\),
+\begin{align*}
+    trace(H) & = trace(X(X^TX)^{-1}X^T) \\
+    & = trace((X(X^TX)^{-1})X^T) \\
+    & = trace(X^T(X(X^TX)^{-1})) & (\because trace(AB) = trace(BA)) \\
+    & = trace((X^TX)(X^TX)^{-1}) \\
+    & = trace(I) \text{ where \(I\) is a \((d+1)\times (d+1)\) Identity matrix}\\
+    & = d+1
+\end{align*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Question 2}
+Given,
+\begin{align*}
+    y & = {\bf w}^{*T}{\bf x} + \e
+\end{align*}
+For the data \(D = \{({\bf x_1},y_1),\ldots ,({\bf x_N},y_N)\}\),
+\begin{align}
+\nonumber
+    y_i & = {\bf w}^{*T}{\bf x_i} + \e_i \text{ for all \(1 \le i \le N\)}\\ 
+    {\bf y} & = {X}{\bf w^*} + {\bf \e}
+\end{align}
+
+\textbf{(a)}We know
+\begin{align}\nonumber
+    {\bf \hat{y}} & = {H\bf{y}}\\\nonumber
+    & = {H} \cdot ({X}{\bf w^*} + {\bf \e})\\\nonumber
+    & = H\cdot X{\bf w^*} + {H}\e\\\nonumber
+    & = (X(X^TX)^{-1}X^T)\cdot X{\bf w^*} + {H}\e\\\nonumber
+    & = X((X^TX)^{-1}(X^TX)){\bf w^*} + {H}\e\\\nonumber
+    & = X(I){\bf w^*} + {H}\e\\
+    & = X{\bf w^*} + {H}\e
+\end{align}
+
+\textbf{(b)} By equations (5) and (6), we know
+\begin{align}\nonumber
+    {\mathbf{y}} & = {X}{\bf w^*} + {\bf \e} \\\nonumber
+    {\bf \hat{y}} & = X{\bf w^*} + {H}\e\\\nonumber
+        {\bf \hat{y}} - {\bf y} & = X{\bf w^*} + {H}\e - ({X}{\bf w^*} + {\bf \e})\\\nonumber
+        & = H\e - \e\\
+        & = (H-I)\e \text{ where \(I\) is a \(N \times N\) Identity matrix}
+\end{align}
+Hence, required matrix is \((H-I)\).
+
+\textbf{(c)}
+\begin{align}\nonumber
+    E_{in}({\bf w_{lin}}) & = \frac{1}{N} \sum_{n=1}^N (\hat{y_i} - y_i)^2 \\ \nonumber
+    & = \frac{1}{N} ||{\bf \hat{y}} - {\bf y}||^2 \\ \nonumber
+    & = \frac{1}{N}||(H-I)\e||^2 \\ \nonumber
+    & = \frac{1}{N} (((H-I)\e)^T(H-I)\e) \\ \nonumber
+    & = \frac{1}{N} (\e^T(H-I)^T(H-I)\e) \\ \nonumber
+    & = \frac{1}{N} (\e^T(H^T-I^T)(H-I)\e) \\ \nonumber
+    & = \frac{1}{N} (\e^T(H-I)(H-I)\e) & (\text{by Equation (1)})\\ \nonumber
+    & = \frac{1}{N} (\e^T(H-I)^2\e) \\ \nonumber
+    & = \frac{1}{N} (\e^T(I-H)^2\e) \\ 
+    & = \frac{1}{N} (\e^T(I-H)\e) & (\text{by Equation (3)})
+\end{align}
+
+\textbf{(d)}
+\begin{align} \nonumber
+    \mathbb{E}_{D}\left[ E_{in}({\bf w_{lin}})\right] & = \mathbb{E}_{D} \left[ \frac{1}{N} (\e^T(I-H)\e) \right] \\ \nonumber
+    & = \frac{1}{N} \mathbb{E}_{D} \left[  \e^T(I-H)\e \right] \\ \nonumber
+    & = \frac{1}{N} \mathbb{E}_{D} \left[  \e^T\e - \e^TH\e \right] \\ \nonumber
+    & = \frac{1}{N} \mathbb{E}_{D} \left[  \sum_{i = 1}^N\e_i^2 - \sum_{i = 1}^N\sum_{j=1}^N\e_ih_{ij}\e_j \right] \\ \nonumber
+    & = \frac{1}{N} \left( \mathbb{E}_{D} \left[  \sum_{i = 1}^N\e_i^2\right] - \mathbb{E}_{D}\left[\sum_{i = 1}^N\sum_{j=1}^N\e_ih_{ij}\e_j \right]\right) \\ 
+    & = \frac{1}{N} \left( \sum_{i = 1}^N\mathbb{E}_{D} \left[  \e_i^2\right] - \sum_{i = 1}^N\sum_{j=1}^N \mathbb{E}_{D}\left[\e_ih_{ij}\e_j \right]\right) 
+\end{align}
+Since \(\e_i\)'s are independent, expectation of each \(\e_i^2\) depends only corresponding \(x_i\) and \(y_i\).
+Let us first simplify the first summation,
+\begin{align} \nonumber
+    \sum_{i = 1}^N\mathbb{E}_{D} \left[  \e_i^2\right] & = \sum_{i = 1}^N\mathbb{E}_{(x_i,y_i)} \left[  \e_i^2\right] \\ \nonumber
+    & = \sum_{i = 1}^N \sigma_i^2 - \mu_i^2\\ \nonumber
+    & = \sum_{i = 1}^N \sigma^2 - 0^2\\ 
+    & = N\sigma^2
+\end{align}
+Now the second summation,
+\begin{align*}
+    \sum_{i = 1}^N\sum_{j=1}^N \mathbb{E}_{D}\left[\e_ih_{ij}\e_j \right] & = \sum_{i = 1}^N\sum_{j=1,j\neq i}^N \mathbb{E}_{D}\left[\e_ih_{ij}\e_j \right] + \sum_{i = 1}^N \mathbb{E}_{D}\left[\e_i^2h_{ii} \right]
+\end{align*}
+Let us approach these terms of both these summations separately,
+\begin{align*}
+    \mathbb{E}_{D}\left[\e_i^2h_{ii} \right] & = \mathbb{E}_{(x_1,y_1)}\left[\e_i^2h_{ii} \right]\\
+    \mathbb{E}_{D}\left[\e_ih_{ij}\e_j \right] & = \mathbb{E}_{\{(x_i,y_i),(x_j,y_j)\}}\left[\e_ih_{ij}\e_j \right]
+\end{align*}
+This is the lowest form to which the expression can be reduced with the given data. However, if we assume \(H\) is not randomly distributed (\(H\) is completely constructed over terms of \(x_i\), which is not a random variable), we can further simply,
+\begin{align*}
+    \mathbb{E}_{D}\left[\e_i^2h_{ii} \right] & = h_{ii}\mathbb{E}_{(x_i,y_i)}\left[\e_i^2 \right]\\
+    & = h_{ii}\sigma^2\\
+    \mathbb{E}_{D}\left[\e_ih_{ij}\e_j \right] & = h_{ij}\mathbb{E}_{\{(x_i,y_i),(x_j,y_j)\}}\left[\e_i\e_j \right]\\
+    & = h_{ij}\mathbb{E}_{(x_i,y_i)}\left[\e_i \right]\mathbb{E}_{(x_j,y_j)}\left[\e_j \right]\\
+    & = h_{ij}\cdot 0\cdot 0\\
+    & = 0
+\end{align*}
+Hence,
+\begin{align}\nonumber
+    \sum_{i = 1}^N\sum_{j=1}^N \mathbb{E}_{D}\left[\e_ih_{ij}\e_j \right] & = \sum_{i = 1}^N h_{ii}\sigma^2\\ \nonumber
+    & = \sigma^2\sum_{i = 1}^N h_{ii}\\
+    & = \sigma^2\cdot trace(H)
+\end{align}
+Substituting in equation (9),
+\begin{align}\nonumber
+    \mathbb{E}_{D}\left[ E_{in}({\bf w_{lin}})\right] & = \frac{1}{N} (N\sigma^2 - \sigma^2trace(H))\\ \nonumber
+    & = \sigma^2 \left( 1 - \frac{trace(H)}{N}\right)\\
+    & = \sigma^2 \left( 1 - \frac{d+1}{N}\right) \text{ by  Equation (4)}
+\end{align}
+
+\textbf{(e)}
+\begin{align}\nonumber
+    E_{test}({\bf w_{lin}}) & = \frac{1}{N} \sum_{n=1}^N (\hat{y_i} - y'_i)^2 \\ \nonumber
+    & = \frac{1}{N} ||{\bf \hat{y}} - {\bf y'}||^2 \\ \nonumber
+    & = \frac{1}{N}||X{\bf w^*} + {H}\e - (X{\bf w^*} + \e')||^2 \\ \nonumber
+    & = \frac{1}{N}||{H}\e - \e'||^2 \\ \nonumber
+    & = \frac{1}{N}(({H}\e - \e')^T({H}\e - \e')) \\ \nonumber
+    & = \frac{1}{N}((\e^TH^T - \e'^T)({H}\e - \e')) \\ \nonumber
+    & = \frac{1}{N}((\e^TH - \e'^T)({H}\e - \e')) \text{ By equation (1)} \\ \nonumber
+    & = \frac{1}{N}(\E^TH^2\E - \E^TH\E' - \E'^TH\E + \E'^T\E')\\ \nonumber
+    \mathbb{E}_{D,\E'}\left[ E_{out}({\bf w_{lin}})\right] & = \mathbb{E}_{D,\E'} \left[ \frac{1}{N} (\E^TH^2\E - \E^TH\E' - \E'^TH\E + \E'^T\E') \right] \\ \nonumber
+    & = \frac{1}{N} \mathbb{E}_{D,\E'} \left[ \E^TH^2\E - \E^TH\E' - \E'^TH\E + \E'^T\E' \right] \\ \nonumber
+    & = \frac{1}{N} \mathbb{E}_{D,\E'} \left[ \E^TH^2\E  + \E'^T\E' \right] \\ \nonumber
+    & = \frac{1}{N} \mathbb{E}_{D,\E'} \left[ \sum_{i=1}^N\sum_{j=1}^N\e_ih_{ij}\e_j + \sum_{i=1}^N\e_i'^2\right] \\ \nonumber
+    & = \frac{1}{N} \left( \sum_{i=1}^N\sum_{j=1}^N\mathbb{E}_{D}\left[\e_ih_{ij}\e_j\right] + \sum_{i=1}^N\mathbb{E}_{D}\left[\e_i'^2\right]\right) \\ \nonumber
+\end{align}
+Substituting from equations (10) and (11),
+\begin{align} \nonumber
+    \mathbb{E}_{D,\E'}\left[ E_{out}({\bf w_{lin}})\right] & = \frac{1}{N}(\sigma^2trace(H) + N(\sigma'^2-\mu'^2)) \nonumber
+\end{align}
+If we assume both \(\e\) and \(\e'\) have the same mean and variance,
+\begin{align} \nonumber
+    \mathbb{E}_{D,\E'}\left[ E_{out}({\bf w_{lin}})\right] & = \frac{1}{N}(\sigma^2trace(H) + N\sigma^2)\\ \nonumber
+    & = \sigma^2 \left( \frac{d+1}{N} + 1 \right) 
+\end{align}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Question 3}
+Given,\\
+\(\sum = {\bf \mathbb{E}_x[xx^T]}\) is non-singular, i.e,
+\begin{align}
+    ||{\bf \mathbb{E}_x[xx^T]}|| & \neq 0
+\end{align}
+
+\textbf{(a)}
+For the purposes of legibility, \(\e_{test}\) will be used to denote the noise realization for the test point and \(\e\) will be used to denote the vector of noise realizations on the data.
+\begin{align} \nonumber
+    y - g({\bf x}) & = {\bf (w^{*\prime})^Tx} + \e_{test} - ({\bf {w_{lin}}^Tx}) \\ \nonumber
+    {\bf w_{lin}} & = X^\dagger{\bf y} \\ \nonumber
+    & = X^\dagger({X}{\bf w^*} + {\bf \e}) \text{ By equation (5)} \\ \nonumber
+    & = ((X^TX)^{-1}X^T)\cdot({X}{\bf w^*} + {\bf \e}) \\ \nonumber
+    {\bf w_{lin}}^T & = ({X}{\bf w^*} + {\bf \e})^T\cdot((X^TX)^{-1}X^T)^T \\ \nonumber
+    & = ({\bf w^*}^TX^T + {\bf \e}^T)\cdot((X^T)^T((X^TX)^{-1})^T) \\ \nonumber
+    & = ({\bf w^*}^TX^T + {\bf \e}^T)\cdot(X((X^TX)^T)^{-1}) \\ \nonumber
+    & = ({\bf w^*}^TX^T + {\bf \e}^T)\cdot(X(X^T(X^T)^T)^{-1}) \\ \nonumber
+    & = ({\bf w^*}^TX^T + {\bf \e}^T)\cdot(X(X^TX)^{-1}) \\ \nonumber
+    & = {\bf w^*}^TX^TX(X^TX)^{-1} + {\bf \e}^TX(X^TX)^{-1} \\ \nonumber
+    & = {\bf w^*}^T + {\bf \e}^TX(X^TX)^{-1} \\ \nonumber
+    {\bf w_{lin}}^T{\bf x} & = {\bf w^*}^T{\bf x} + {\bf \e}^TX(X^TX)^{-1}{\bf x} \\ \nonumber
+    & = {\bf w^*}^T{\bf x} + ({\bf x}^T({\bf \e}^TX(X^TX)^{-1})^T)^T  \\ \nonumber
+    & = {\bf w^*}^T{\bf x} + ({\bf x}^T((X^TX)^{-1})^TX^T{\bf \e})^T  \\ \nonumber
+    & = {\bf w^*}^T{\bf x} + ({\bf x}^T((X^TX)^T)^{-1}X^T{\bf \e})^T  \\ \nonumber
+    & = {\bf w^*}^T{\bf x} + ({\bf x}^T(X^TX)^{-1}X^T{\bf \e})^T 
+\end{align}
+Since all terms in the given expression are scalars,
+\begin{align}
+    {\bf w_{lin}}^T{\bf x} & = {\bf w^*}^T{\bf x} + {\bf x}^T(X^TX)^{-1}X^T{\bf \e}
+\end{align}
+Hence,
+\begin{align} \nonumber
+    y - g({\bf x}) & = {\bf (w^{*\prime})^Tx} + \e_{test} - ({\bf w^*}^T{\bf x} + {\bf x}^T(X^TX)^{-1}X^T{\bf \e})
+\end{align}
+If the test data set also comes from the same genuine linear relationship,
+\begin{align} 
+    y - g({\bf x}) & = \e_{test} - {\bf x}^T(X^TX)^{-1}X^T{\bf \e}
+\end{align}
+
+\textbf{(b)}
+\begin{align} \nonumber
+    E_{out} & = \mathbb{E}_{{\bf x},\e_{test}} \left[ (y - g({\bf x}))^2\right] \\ \nonumber
+    & = \mathbb{E}_{{\bf x},\e_{test}} \left[ (\e_{test} - {\bf x}^T(X^TX)^{-1}X^T{\bf \e})^2 \right] \text{ By equation (15)}\\ \nonumber
+    & = \mathbb{E}_{{\bf x},\e_{test}} \left[ \e_{test}^2 -2\e_{test}{\bf x}^T(X^TX)^{-1}X^T{\bf \e} + ({\bf x}^T(X^TX)^{-1}X^T{\bf \e})^2 \right] \\ \nonumber
+    & = \mathbb{E}_{\e_{test}} \left[ \e_{test}^2\right] - 2\mathbb{E}_{\e_{test}} \left[\e_{test}\right]\mathbb{E}_{D}\left[{\bf x}^T(X^TX)^{-1}X^T{\bf \e}\right] + \mathbb{E}_{D}\left[({\bf x}^T(X^TX)^{-1}X^T{\bf \e})({\bf x}^T(X^TX)^{-1}X^T{\bf \e})^T \right]
+\end{align}
+Since \({\bf x}^T(X^TX)^{-1}X^T{\bf \e}\) is a scalar, it is equal to its transpose. Also \(a = trace(a)\) for any scalar \(a\).
+\begin{align} \nonumber
+    E_{out} & = \mathbb{E}_{\e_{test}} \left[ \e_{test}^2\right] - 2\cdot0\cdot\mathbb{E}_{D}\left[{\bf x}^T(X^TX)^{-1}X^T{\bf \e}\right] + \mathbb{E}_{D}\left[trace(({\bf x}^T(X^TX)^{-1}X^T{\bf \e})({\bf x}^T(X^TX)^{-1}X^T{\bf \e})^T) \right] \\ \nonumber
+    & = \sigma^2 + trace \left( \mathbb{E}_{D}\left[ {\bf x}^T(X^TX)^{-1}X^T{\bf \e}{\bf \e}^TX((X^TX)^{-1})^T{\bf x} \right] \right) \\ \nonumber
+    & = \sigma^2 + trace \left(\mathbb{E}_{D}\left[ {\bf x}{\bf x}^T(X^TX)^{-1}X^T{\bf \e}{\bf \e}^TX((X^TX)^{-1})^T \right]\right) \text{ (\(trace(AB) = trace(BA)\))}\\ \nonumber
+    & = \sigma^2 + trace\left(\mathbb{E}_{\bf x}\left[ {\bf x}{\bf x}^T\right](X^TX)^{-1}X^T{\bf \e}{\bf \e}^TX((X^TX)^{T})^{-1} \right) \\
+    & = \sigma^2 + trace\left(\Sigma(X^TX)^{-1}X^T{\bf \e}{\bf \e}^TX(X^TX)^{-1} \right)
+\end{align}
+
+\textbf{(c)}
+\(\e\) is a \(N\times1\) matrix, and its transpose is a \(1\times N\) matrix. Hence, the matrix product results in a \(N\times N\) matrix.
+\begin{align*}
+    \e\e^T & = \begin{array}{|c|}
+         \e_1  \\
+         \e_2 \\
+         \ldots \\
+         \e_N
+    \end{array} \cdot
+    \begin{array}{|cccc|}
+         \e_1 & \e_2 & \ldots & \e_N
+    \end{array} \\ \nonumber
+    & = \begin{array}{|cccc|}
+         \e_1\e_1 & \e_1\e_2 & \ldots & \e_1\e_N \\
+         \e_2\e_1 & \e_2\e_2 & \ldots & \e_2\e_N \\
+         \ldots & \ldots & \ldots & \ldots \\
+         \e_N\e_1 & \e_N\e_2 & \ldots & \e_N\e_N
+    \end{array}
+\end{align*}
+Expectation over \(\e\) will apply to each term in the matrix, with
+
+%Source - https://en.wikibooks.org/wiki/LaTeX/Advanced_Mathematics
+\[\mathbb{E}_{\e}[\e_i\e_j] = \left\{
+  \begin{array}{lr}
+    0 & : i \neq j\\
+    \sigma^2 & : i = j
+  \end{array}
+\right.
+\]
+
+\begin{align} \nonumber
+    \mathbb{E}_{\e}[\e\e^T] & = \begin{array}{|cccc|}
+         \sigma^2 & 0 & \ldots & 0 \\
+         0 & \sigma^2 & \ldots & 0 \\
+         \ldots & \ldots & \ldots & \ldots \\
+         0 & 0 & \ldots & \sigma^2
+    \end{array} \\ 
+    \mathbb{E}_{\e}[\e\e^T] & = \sigma^2I \\ \nonumber
+\end{align}
+
+\textbf{(d)} Taking expectation over \(\e\) on equation (16),
+\begin{align}\nonumber
+    E_{out} & = E_\e\left[ \sigma^2 + trace\left(\Sigma(X^TX)^{-1}X^T{\bf \e}{\bf \e}^TX(X^TX)^{-1} \right) \right] \\ \nonumber
+    & = \sigma^2 + E_\e\left[trace\left(\Sigma(X^TX)^{-1}X^T{\bf \e}{\bf \e}^TX(X^TX)^{-1} \right) \right] \\ \nonumber
+    & = \sigma^2 + trace\left(E_\e\left[\Sigma(X^TX)^{-1}X^T\right]E_\e\left[{\bf \e}{\bf \e}^T\right]E_\e\left[X(X^TX)^{-1}\right] \right) \\ \nonumber
+    & = \sigma^2 + trace\left(\Sigma(X^TX)^{-1}X^TE_\e\left[{\bf \e}{\bf \e}^T\right]X(X^TX)^{-1} \right) \\ \nonumber
+    & = \sigma^2 + trace\left(\Sigma(X^TX)^{-1}X^T\sigma^2IX(X^TX)^{-1} \right) \text{ By equation (17)}\\ \nonumber
+    & = \sigma^2 + \sigma^2trace\left(\Sigma(X^TX)^{-1}X^TX(X^TX)^{-1} \right) \\ \nonumber
+    & = \sigma^2\left(1 + trace\left(\Sigma(X^TX)^{-1} \right)\right) \\ \nonumber
+    & = \sigma^2\left(1 + trace\left(\frac{1}{N}\cdot N \cdot\Sigma(X^TX)^{-1} \right)\right) \\ \nonumber
+    & = \sigma^2\left(1 + \frac{1}{N}trace\left(N \cdot\Sigma(X^TX)^{-1} \right)\right) \\ 
+    & = \sigma^2\left(1 + \frac{1}{N}trace\left( \Sigma(\frac{1}{N}X^TX)^{-1} \right)\right)
+\end{align}
+If \(\frac{1}{N}X^TX \approx \Sigma\), we have
+\begin{align*}
+    E_{out} & = \sigma^2\left(1 + \frac{1}{N}trace\left( I \right)\right) \text{where \(I\) is a \(d+1 \times d+1\) Identity matrix} \\ \nonumber
+    & = \sigma^2\left(1 + \frac{d+1}{N}\right) \\ \nonumber
+\end{align*}
+
+\textbf{(e)}
+By the definition of convergence in probability, for sufficiently small \(\delta\), \((\frac{1}{N}X^TX)^{-1}\) lies within \(\delta\) of \(\Sigma^{-1}\) with required high probability with respect to a given norm,i.e.,
+\begin{align}
+    \left|\left|\left(\frac{1}{N}X^TX\right)^{-1} - \Sigma^{-1}\right|\right| & \leq \delta
+\end{align}
+\begin{align}\nonumber
+    E_{out} & = \sigma^2\left(1 + \frac{1}{N}trace\left( I \right) + \frac{c}{N}\right) \text{ where \(c\) is a constant}\\ 
+    & = \sigma^2\left(1 + \frac{d+1}{N} + O\left(\frac{1}{N}\right)\right)
+\end{align}
+\end{document}
