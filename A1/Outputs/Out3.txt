@@ -1,0 +1,2 @@
+Final MSE and MAE on train are: 7.285247240934699  and  2.6991197159323446
+Final MSE and MAE on validation are: 1.474345543923734  and  0.44223740561431435

@@ -1,0 +1,11 @@
+Termination of ridge regression by maxit with lambda =  5
+w =  [ 0.01101137 -0.01004751 -0.01229542 ...  0.01413642  0.00490421
+ -0.00632915]
+Final MSE and MAE on train are: 0.14687606584412294  and  0.3002182441295067
+Final MSE and MAE on validation are: 0.10733115873786968  and  0.09781390398739045 
+
+Termination of ridge regression by maxit with lambda =  25
+w =  [ 0.01096949 -0.00901447 -0.01112997 ...  0.01296914  0.00453949
+ -0.00573874]
+Final MSE and MAE on train are: 0.16633349593063995  and  0.3214459237457869
+Final MSE and MAE on validation are: 0.10302342975223235  and  0.09538660399365138

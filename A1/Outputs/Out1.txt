@@ -1,0 +1,28 @@
+For alpha =  0.1 ,
+Termination by maxit with  40  iterations.
+w =  [-3.61635999e+66 -5.83198668e+65 -5.43205532e+65 ... -3.19811641e+65
+ -7.72002444e+65 -5.31147296e+65]
+Final MSE and MAE on train are: 3.751577050913506e+138  and  1.9068046672507816e+69
+Final MSE and MAE on validation are: 5.594472940863734e+137  and  2.8290745659623185e+68
+Since gradient descent is diverging, reltol will not be able to find solution either 
+
+For alpha =  0.01 ,
+Termination by maxit with  50  iterations.
+w =  [-3.50534843e+29 -5.65296194e+28 -5.26530730e+28 ... -3.09994370e+28
+ -7.48304253e+28 -5.14842645e+28]
+Final MSE and MAE on train are: 3.5247875616474153e+64  and  1.848271405555103e+32
+Final MSE and MAE on validation are: 5.25627712514338e+63  and  2.7422303470603306e+31
+Since gradient descent is diverging, reltol will not be able to find solution either 
+
+For alpha =  0.001 ,
+Termination by maxit with  1000  iterations.
+w =  [ 0.01091934 -0.0067283  -0.00874251 ...  0.0106183   0.00388683
+ -0.00469379]
+Final MSE and MAE on train are: 0.22282572493432173  and  0.3760290120346339
+Final MSE and MAE on validation are: 0.09405022775563182  and  0.09091900686248729
+Termination by reltol with bound =  1e-06
+w =  [ 0.01077123 -0.00181154 -0.00266539 ...  0.00443972  0.001696
+ -0.00116015]
+Final MSE and MAE on train are: 0.38881067790449847  and  0.5011810207678291
+Final MSE and MAE on validation are: 0.08217559439206809  and  0.0820887944933938 
+

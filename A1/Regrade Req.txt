@@ -1,0 +1,78 @@
+Dear all,
+
+Grades for assignment 1 have been released on moodle. 
+
+Grades rubric:
+P1 - part for linear regression section (2 grades), ridge regression section (1.5 grades), classification section (3 grades) -> Total 6 grades.
+
+Full grades are awarded when the correct code, running according to part 4 - Evaluation is present, mse, mae & observations are reported and graphs are plotted.
+
+0.5 deducted from each section if not running as mentioned.
+
+P2 - part for other sections of assignment -> Total 5.5 grades
+
+This includes sci-kit learn (1 grade), feature selection and plots after selecting features (1 grade),
+
+generalization and visualization (2.5 grades) (0.5 grade each for - (i) normalization, (ii) 4 sizes of train data, (iii) two halves of train data, (iv) plots for corresponding score values, (v) generalization analysis with plots),
+
+report including update equations and observations (1 grade) 
+
+Full grades are awarded when the code, and reported values of loss, plots, and observations are present and observation and understanding are found ok in the demo.
+
+Competitive part total points - the sum of linear regression points, ridge regression points, and classification points. (This is based on distribution of performance among submissions)
+
+ 
+
+linear regression points - points for the performance of linear regression predictions as compared to answers that can be found here
+
+1 grade if sum of mse and mae is less than 37.99
+
+0.75 if sum is less than 39.99
+
+0.5 if sum is less than 50
+
+0.25 otherwise
+
+if the code wasn't working properly and needed changes, for the predictions submitted in demo - 
+
+0.33 if sum is less than 50, 0 otherwise
+
+ridge regression points - points for the performance of linear regression predictions as compared to answers that can be found here
+
+1 grade if sum of mse and mae is less than 37.99
+
+0.75 if sum is less than 39.99
+
+0.5 if sum is less than 50
+
+0.25 otherwise
+
+if the code wasn't working properly and needed changes, for the predictions submitted in demo - 
+
+0.33 if sum is less than 50, 0 otherwise
+
+classification regression points - points for the performance of linear regression predictions as compared to answers that can be found here
+
+1 grade if sum of mse and mae is less than 65
+
+0.75 if sum is less than 69
+
+0.5 if sum is less than 73
+
+0.25 otherwise
+
+if the code wasn't working properly and needed changes, for the predictions submitted in the demo -
+
+0.33 if sum is less than 73, 0 otherwise
+
+Bonus - Full grades are given when all other parts are complete, and the correct code is present. 
+
+Regrade request can be sent in this form
+
+Request can be asked for a section - ex only the linear regression section of P1, but please see that all parts mentioned in the rubric of that section are present.
+
+Please read comment / feedback if present before requesting.
+
+The deadline for sending regrades is 21st March, Tuesday. 
+
+The percentage and weightage of the grades mentioned in moodle for the total of coursework will change later.

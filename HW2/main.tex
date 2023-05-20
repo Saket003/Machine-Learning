@@ -1,0 +1,306 @@
+\documentclass[12pt]{article}
+\usepackage{latexsym}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{epsfig}
+\usepackage{ulem}
+
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf COL341: Fundamentals of Machine Learning} \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\e}[0]{\epsilon}
+\newcommand{\E}[0]{\epsilon}
+\newcommand{\bd}[1]{\boldsymbol{#1}}
+\newcommand{\homework}[4]{\handout{#1}{#2}{Lecturer: #3}{#4}{Homework #1}}
+
+% 1-inch margins, from fullpage.sty by H.Partl, Version 2, Dec. 15, 1988.
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+\begin{document}
+\homework{2}{Spring 2023}{Prof. Chetan Arora}{Saket Kandoi 2021MT60265}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Question 1}
+Primal problem of soft SVM is:
+\begin{align}
+    \min_{\bd{w},b}\frac{1}{2}\bd{w}^T\bd{w} + C\sum_{n=1}^N\zeta_n
+\end{align}
+such that, \(\forall n = 1,...,N\) :
+\begin{align}
+    y_n(\bd{w}^T\bd{x}_n+b) & \geq 1 - \zeta_n \\
+    \zeta_n & \geq 0 
+\end{align}
+
+A general primal problem,
+\begin{align*}
+    \min_{\bd{u}} \frac{1}{2}\bd{u}^T\theta\bd{u} + P^T\bd{u} \\
+    \text{s.t. } \bd{a}_n^T\bd{u} \geq \bd{c}_n
+\end{align*}
+Has its corresponding Lagrangian dual of the form,
+\begin{align*}
+    \max_{\alpha}\min_{\bd{u}} L
+\end{align*}
+\begin{align*}
+    \text{where } L = \frac{1}{2}\bd{u}^T\theta\bd{u} + P^T\bd{u} + \sum_{n=1}^N\alpha_n(\bd{c}_n - \bd{a}_n^T\bd{u}) \\
+    \text{s.t. } \alpha_n \geq 0
+\end{align*}
+
+Hence, \(L\) for soft SVM is:
+\begin{align*}
+    L = \frac{1}{2}\bd{w}^T\bd{w} + C\sum_{n=1}^N\zeta_n + \sum_{n=1}^N\alpha_n(1 - \zeta_n - y_n(\bd{w}^T\bd{x}_n+b)) - \sum_{n=1}^N\beta_n\zeta_n \\
+\end{align*}
+And its lagrangian dual is,
+\begin{align*}
+    \max_{\alpha}\min_{\bd{\bd{w},b,\zeta}} L
+\end{align*}
+\begin{align*}
+    \text{s.t. } \alpha_n \geq 0 \text{ and } \beta_n \geq 0
+\end{align*}
+Applying Stationarity conditions w.r.t each parameter,
+\begin{align}\nonumber
+    \frac{\delta L}{\delta b} & = -\sum_n\alpha_ny_n\\ \nonumber
+    \frac{\delta L}{\delta b} & = 0 \\
+    \sum_n\alpha_ny_n & = 0
+\end{align}
+\begin{align}\nonumber
+    \frac{\delta L}{\delta \bd{w}} & = \bd{w} - \sum_n\alpha_ny_n\bd{x}_n \\ \nonumber
+    \frac{\delta L}{\delta \bd{w}} & = 0\\
+    \bd{w} & =  \sum_n\alpha_ny_n\bd{x}_n
+\end{align}
+\begin{align*}
+    \frac{\delta L}{\delta \bd{\zeta}} & = \frac{\delta L}{\delta {\zeta_1}}\hat{\bd{e_{1}}} + \frac{\delta L}{\delta {\zeta_2}}\hat{\bd{e_{2}}} + ... + \frac{\delta L}{\delta {\zeta_n}}\hat{\bd{e_{n}}}
+\end{align*}
+\begin{align}\nonumber
+    \frac{\delta L}{\delta \bd{\zeta_i}} & = C - \alpha_n - \beta_n\\ \nonumber
+    \frac{\delta L}{\delta \bd{\zeta}} & = 0\\ \nonumber
+    \frac{\delta L}{\delta \bd{\zeta_i}} & = 0\\
+    \alpha_n & = C - \beta_n
+\end{align}
+Dual condition implies
+\begin{align*}
+    \beta_n & \geq 0\\
+    \alpha_n & \leq C
+\end{align*}
+\begin{align*}
+     L & = \frac{1}{2}\bd{w}^T\bd{w} + C\sum_{n=1}^N\zeta_n + \sum_{n=1}^N\alpha_n - \sum_{n=1}^N\alpha_n\zeta_n - \sum_{n=1}^N\alpha_ny_n\bd{w}^T\bd{x}_n + \sum_{n=1}^N\alpha_ny_nb - \sum_{n=1}^N\beta_n\zeta_n \\
+     L & = \frac{1}{2}\bd{w}^T\bd{w} +  \sum_{n=1}^N\alpha_n + \sum_{n=1}^N(C - \alpha_n - \beta_n)\zeta_n - \bd{w}^T\sum_{n=1}^N\alpha_ny_n\bd{x}_n + b\sum_{n=1}^N\alpha_ny_n \\
+\end{align*}
+Substituting equations (4), (5) and (6) in Lagrangian,
+\begin{align*}
+     L & = \frac{1}{2}\bd{w}^T\bd{w} +  \sum_{n=1}^N\alpha_n - \bd{w}^T\bd{w} \\
+     L & = -\frac{1}{2}\bd{w}^T\bd{w} +  \sum_{n=1}^N\alpha_n \\
+     L & = -\frac{1}{2}\sum_{m=1}^N\sum_{n=1}^Ny_ny_m\alpha_n\alpha_m\bd{x}_n^T\bd{x}_m +  \sum_{n=1}^N\alpha_n \\
+\end{align*}
+Hence, dual problem reduces to
+\begin{align*}
+    \max_{\alpha} -\frac{1}{2}\sum_{m=1}^N\sum_{n=1}^Ny_ny_m\alpha_n\alpha_m\bd{x}_n^T\bd{x}_m +  \sum_{n=1}^N\alpha_n
+\end{align*}
+which is equivalent to
+\begin{align*}
+    \min_{\alpha} \frac{1}{2}\sum_{m=1}^N\sum_{n=1}^Ny_ny_m\alpha_n\alpha_m\bd{x}_n^T\bd{x}_m -  \sum_{n=1}^N\alpha_n
+\end{align*}
+\begin{align*}
+    \text{s.t. } \sum_{n=1}^Ny_n\alpha_n & = 0\\
+    0 \leq \alpha_n \leq C \text{ \(\forall n\)}
+\end{align*}
+
+\section*{Question 2}
+Given, \(N\) is even and \(N/2\) labels of \(y_1,...,y_n\) are \(+1\) and the remaining \(N/2\) are \(-1\).
+\begin{align*}
+    \sum_{n=1}^N y_n & = 0 \\
+    ||\bd{x}||^2 & = ||\bd{x}\cdot\bd{x}||
+\end{align*}
+
+\textbf{1.}
+\begin{align}\nonumber
+    \left| \left| \sum_{n=1}^N y_n\bd{x}_n\right|\right|^2 & = \left|\left|\left(\sum_{n=1}^N y_n\bd{x}_n\right)\cdot\left(\sum_{m=1}^N y_m\bd{x}_m\right)\right|\right| \\ \nonumber
+    & = \left| \left|\sum_{n=1}^N \sum_{m=1}^N y_ny_m (\bd{x}_n\cdot\bd{x}_m) \right| \right| \\ \nonumber
+    & = \left| \left|\sum_{n=1}^N \sum_{m=1}^N y_ny_m\bd{x}_n^T\bd{x}_m \right| \right| \\ \nonumber
+\end{align}
+Since terms of the summation are scalars,
+\begin{align}
+    \left| \left| \sum_{n=1}^N y_n\bd{x}_n\right|\right|^2 & = \sum_{n=1}^N \sum_{m=1}^N y_ny_m\bd{x}_n^T\bd{x}_m \\ \nonumber
+\end{align}
+
+
+\textbf{2.} When \(n = m\),
+\begin{align}\nonumber
+    y_ny_m & = y_n^2
+\end{align}
+Label \(y_n\) can be either \(1\) or \(-1\).
+\begin{align}\nonumber
+    y_ny_m & = 1 \\ \nonumber
+    \mathbb{P}[y_ny_m = 1] & = 1 \\ \nonumber \\ \nonumber
+    \mathbb{E}[y_ny_m] & = 1
+\end{align}
+
+When \(n \neq m\),
+\begin{align} \nonumber
+    \mathbb{P}[y_ny_m = 1] & = \mathbb{P}[(y_n = 1 \cap y_m = 1)\cup(y_n = -1 \cap y_m = -1)] \\ \nonumber
+    & = \mathbb{P}[y_n = 1 \cap y_m = 1] + \mathbb{P} [y_n = -1 \cap y_m = -1] \\ \nonumber
+    & = \frac{\frac{N}{2}}{N}\frac{\frac{N}{2}-1}{N-1} + \frac{\frac{N}{2}}{N}\frac{\frac{N}{2}-1}{N-1} \\ \nonumber
+    & = 2\cdot\frac{1}{2}\cdot\frac{\frac{N}{2}-1}{N-1} \\ \nonumber
+    & = ({\frac{N}{2}-1})/({N-1}) \\ \nonumber \\ \nonumber
+    \mathbb{E}[y_ny_m] & = 1\cdot\mathbb{P}[y_ny_m = 1] + (-1)\cdot\mathbb{P}[y_ny_m = -1] \\ \nonumber
+    & = \mathbb{P}[y_ny_m = 1] - (1 - \mathbb{P}[y_ny_m = 1]) \\ \nonumber
+    & = 2\cdot\mathbb{P}[y_ny_m = 1] - 1 \\ \nonumber
+    & = 2\cdot\frac{\frac{N}{2}-1}{N-1} - 1 \\ \nonumber
+    & = \frac{N-2 -(N-1)}{N-1}\\ \nonumber
+    \mathbb{E}[y_ny_m] & = \frac{-1}{N-1}
+\end{align}
+Hence,
+\begin{align}
+    \mathbb{E}[y_ny_m] & = 
+    \begin{cases}
+        1 & m = n\\
+        -\frac{1}{N-1} & m\neq n
+    \end{cases}
+\end{align}
+
+\textbf{3.} By Equation (7),
+\begin{align*}
+    \mathbb{E}\left[\left| \left| \sum_{n=1}^N y_n\bd{x}_n\right|\right|^2\right] & = \mathbb{E}\left[\sum_{n=1}^N \sum_{m=1}^N y_n y_m\bd{x}_n^T\bd{x}_m\right]
+\end{align*}
+Since \(n\), \(m\) and \(N\) are fixed, and \(\bd{x}_n\) and \(\bd{x}_m\) are not random variables,
+\begin{align*}
+    \mathbb{E}\left[\left| \left| \sum_{n=1}^N y_n\bd{x}_n\right|\right|^2\right] & = \sum_{n=1}^N \sum_{m=1}^N \mathbb{E}\left[y_n y_m\right]\bd{x}_n^T\bd{x}_m \\
+    & = \sum_{n=1}^N \sum_{m=n}^N \mathbb{E}\left[y_n y_m\right]\bd{x}_n^T\bd{x}_m + \sum_{n=1}^N \sum_{\substack{m=1\\m\neq n}}^N \mathbb{E}\left[y_n y_m\right]\bd{x}_n^T\bd{x}_m \\
+    & = \sum_{n=1}^N \sum_{m=n}^N \bd{x}_n^T\bd{x}_m + \sum_{n=1}^N \sum_{\substack{m=1\\m\neq n}}^N \frac{-\bd{x}_n^T\bd{x}_m}{N-1} \\
+    & = \sum_{n=1}^N  ||\bd{x}_n||^2 + \sum_{n=1}^N \sum_{\substack{m=1\\m\neq n}}^N \frac{-\bd{x}_n^T\bd{x}_m}{N-1} \\
+    & = \sum_{n=1}^N  ||\bd{x}_n||^2 + \sum_{n=1}^N \sum_{m=1}^N \frac{-\bd{x}_n^T\bd{x}_m}{N-1} -  \sum_{n=1}^N \sum_{m=n}^N \frac{-\bd{x}_n^T\bd{x}_m}{N-1}\\
+    & = \sum_{n=1}^N  ||\bd{x}_n||^2 - \frac{1}{N-1}\left| \left| \sum_{n=1}^N \bd{x}_n\right|\right|^2 + \frac{1}{N-1}\sum_{n=1}^N  ||\bd{x}_n||^2 \\
+    & = \frac{N}{N-1}\sum_{n=1}^N  ||\bd{x}_n||^2- \frac{1}{N-1}\left| \left| \sum_{n=1}^N \bd{x}_n\right|\right|^2 \\
+    & = \frac{N}{N-1}\sum_{n=1}^N  ||\bd{x}_n||^2- \frac{N^2}{N-1}\left| \left| \tilde{\bd{x}} \right|\right|^2 \\
+    & = \frac{N}{N-1}\left(\sum_{n=1}^N  ||\bd{x}_n||^2 - N\left| \left| \tilde{\bd{x}} \right|\right|^2 \right)\\
+    & = \frac{N}{N-1}\left(\sum_{n=1}^N  ||\bd{x}_n||^2 - 2N\left| \left| \tilde{\bd{x}} \right|\right|^2 + N\left| \left| \tilde{\bd{x}} \right|\right|^2 \right)\\
+    & = \frac{N}{N-1}\left(\sum_{n=1}^N  ||\bd{x}_n||^2 - 2N\left| \left| \tilde{\bd{x}} \right|\right|^2 + \sum_{n=1}^N\left| \left| \tilde{\bd{x}} \right|\right|^2 \right)\\
+    & = \frac{N}{N-1}\left(\sum_{n=1}^N  ||\bd{x}_n||^2 - 2N \tilde{\bd{x}}^T\tilde{\bd{x}} + \sum_{n=1}^N\left| \left| \tilde{\bd{x}} \right|\right|^2 \right)\\
+    & = \frac{N}{N-1}\left(\sum_{n=1}^N  ||\bd{x}_n||^2 - 2 \tilde{\bd{x}}^T\cdot \sum_{n=1}^N\bd{x}_n + \sum_{n=1}^N\left| \left| \tilde{\bd{x}} \right|\right|^2 \right)\\
+\end{align*}
+\begin{align}\nonumber
+    & = \frac{N}{N-1}\left(\sum_{n=1}^N  ||\bd{x}_n||^2 - 2\sum_{n=1}^N \tilde{\bd{x}}^T\cdot\bd{x}_n + \sum_{n=1}^N\left| \left| \tilde{\bd{x}} \right|\right|^2 \right)\\ \nonumber
+    & = \frac{N}{N-1}\sum_{n=1}^N\left(||\bd{x}_n||^2 - 2 \tilde{\bd{x}}^T\cdot\bd{x}_n + \left| \left| \tilde{\bd{x}} \right|\right|^2 \right)\\
+    & = \frac{N}{N-1}\sum_{n=1}^N\left(||\bd{x}_n-\tilde{\bd{x}} ||^2 \right)
+\end{align}
+
+\textbf{4. }
+\\
+%Changes in Q4
+\begin{align*}
+    ||\bd{x}_n - \tilde{\bd{x}}||^2 & \leq \sum_{n=1}^N||\bd{x}_n - \tilde{\bd{x}}||^2
+\end{align*}
+Since \(\sum_{n=1}^N||\bd{x}_n - \bd\mu||^2\) is minimum at \(\bd\mu = \tilde{\bd{x}}\),
+\begin{align*}
+    ||\bd{x}_n - \tilde{\bd{x}}||^2 & \leq \sum_{n=1}^N||\bd{x}_n - \bd\mu||^2 \text{ for all \(\mu \in \mathbb{R}^d\)}
+\end{align*}
+Putting \(\mu = \bd{0}\),
+\begin{align*}
+    ||\bd{x}_n - \tilde{\bd{x}}||^2 & \leq \sum_{n=1}^N||\bd{x}_n||^2
+\end{align*}
+Since input space is a ball of radius \(R\) in \(\mathbb{R}^d\),
+\begin{align*}
+    ||\bd{x}_n|| & \leq R \\
+    \sum_{n=1}^N||\bd{x}_n||^2 & \leq \sum_{n=1}^NR^2 = NR^2\\
+\end{align*}
+Hence, 
+\begin{align} \nonumber
+    ||\bd{x}_n - \tilde{\bd{x}}||^2 & \leq NR^2
+\end{align}
+\\
+(\textit{Note:} This is the required proof in the question, however I shall prove the same bound for the summation, which has an application in the following part.)\\
+
+\textbf{Proof of Hint:}\\
+Triangle inequality on norms gives us
+\begin{align*}
+    ||A_1|| + ||A_2|| + ... + ||A_n|| & \geq  ||A_1 + A_2 + ... + A_n||\\
+\end{align*}
+Hence,
+\begin{align*}
+    \sum_{n=1}^N||\bd{x}_n - \bd\mu||^2 & \geq ||\sum_{n=1}^N(\bd{x}_n - \bd\mu)||^2 \\
+    \sum_{n=1}^N||\bd{x}_n - \bd\mu||^2 & \geq ||N\tilde{\bd{x}} - N\bd\mu||^2
+\end{align*}
+RHS is minimum at \(\tilde{\bd{x}} = \bd\mu\), hence proved.\\
+
+Since \(\sum_{n=1}^N||\bd{x}_n - \bd\mu||^2\) is minimum at \(\bd\mu = \tilde{\bd{x}}\),
+\begin{align*}
+    \sum_{n=1}^N||\bd{x}_n - \tilde{\bd{x}}||^2 & \leq \sum_{n=1}^N||\bd{x}_n - \bd\mu||^2 \text{ for all \(\mu \in \mathbb{R}^d\)}
+\end{align*}
+Putting \(\mu = \bd{0}\),
+\begin{align*}
+    \sum_{n=1}^N||\bd{x}_n - \tilde{\bd{x}}||^2 & \leq \sum_{n=1}^N||\bd{x}_n||^2
+\end{align*}
+Since input space is a ball of radius \(R\) in \(\mathbb{R}^d\),
+\begin{align*}
+    ||\bd{x}_n|| & \leq R \\
+    \sum_{n=1}^N||\bd{x}_n||^2 & \leq \sum_{n=1}^NR^2 = NR^2\\
+\end{align*}
+Hence, 
+\begin{align} 
+    \sum_{n=1}^N||\bd{x}_n - \tilde{\bd{x}}||^2 & \leq NR^2
+\end{align}
+
+\textbf{5.} By equations (9) and (10),
+\begin{align} \nonumber
+    \mathbb{E}\left[\left| \left| \sum_{n=1}^N y_n\bd{x}_n\right|\right|^2\right] & \leq \frac{N}{N-1}\cdot NR^2 \\ \nonumber
+    \mathbb{E}\left[\left| \left| \sum_{n=1}^N y_n\bd{x}_n\right|\right|^2\right] & \leq \frac{N^2R^2}{N-1}
+\end{align}
+Since expectation of \(\left| \left| \sum_{n=1}^N y_n\bd{x}_n\right|\right|^2\) is less than \(\frac{N^2R^2}{N-1}\), it can attain a value less than \(\frac{N^2R^2}{N-1}\) with non-zero probability. Hence,
+\begin{align*}
+    \mathbb{P}\left[\left| \left| \sum_{n=1}^N y_n\bd{x}_n\right|\right|^2 \leq \frac{N^2R^2}{N-1}\right] & > 0 \\
+    \mathbb{P}\left[\left| \left| \sum_{n=1}^N y_n\bd{x}_n\right|\right| \leq \frac{NR}{\sqrt{N-1}}\right] & > 0
+\end{align*}
+Thus, for some choice of of a balanced dichotomy \(y_1,...,y_n\),
+\begin{align}
+    \sum_{n=1}^Ny_n & = 0 \\
+    \left| \left| \sum_{n=1}^N y_n\bd{x}_n\right|\right| & \leq \frac{NR}{\sqrt{N-1}}
+\end{align}
+
+Since \(N\) points are being shattered, they can be separated by SVM with margin at least \(\rho\).
+Hence, for some \(\bd{w}\) and \(b\),
+\begin{align*}
+    \rho & \leq d_n \forall n
+\end{align*}
+where \(d_n\) is distance from the hyper-plane.
+\begin{align*}
+    d_n & = \frac{y_n(\bd{w}^T\bd{x}_n+b)}{||w||} \\
+    \rho & \leq \frac{y_n(\bd{w}^T\bd{x}_n+b)}{||w||} \forall n
+\end{align*}
+Taking summation of inequalities over all \(n\),
+\begin{align*}
+    \rho N & \leq \frac{1}{||w||}\left(\sum_{n=1}^Ny_n\bd{w}^T\bd{x}_n + \sum_{n=1}^Nby_n\right) \\
+    & \leq \frac{1}{||w||}\left(\left|\left|\sum_{n=1}^Ny_n\bd{w}^T\bd{x}_n\right|\right| + b\sum_{n=1}^Ny_n\right) \\
+    & \leq \frac{1}{||w||}\left(\left|\left|\bd{w}^T\sum_{n=1}^Ny_n\bd{x}_n\right|\right|\right) & (\text{By Equation (11)})\\
+    & \leq \frac{1}{||w||}\left(\left|\left|\bd{w}^T\right|\right|\left|\left|\sum_{n=1}^Ny_n\bd{x}_n\right|\right|\right) & (\text{By Cauchy-Schwarz inequality \(||\bd{uv}|| \leq ||\bd{u}||\cdot||\bd{v}||\)})\\
+    & \leq \left|\left|\sum_{n=1}^Ny_n\bd{x}_n\right|\right| \\
+    & \leq \frac{NR}{\sqrt{N-1}} & (\text{By Equation (12)})
+\end{align*}
+\begin{align*}
+    \rho N & \leq \frac{NR}{\sqrt{N-1}}\\
+    \sqrt{N-1} & \leq \frac{R}{\rho} \\
+    N & \leq \frac{R^2}{\rho^2} + 1 \\
+    \therefore d_{VC}(\rho) & \leq \lceil R^2/\rho^2 \rceil + 1\\
+\end{align*}
+\end{document}
+
